@@ -121,7 +121,7 @@ export default function AddStaffScreen() {
             <ScrollView
                 contentInsetAdjustmentBehavior='automatic'
                 style={styles.flex}
-                contentContainerStyle={{ flexGrow: 1, gap: 20, padding: 14, paddingBottom: 40, paddingTop: Platform.OS === 'android' ? 80 : 0, }}
+                contentContainerStyle={{ flexGrow: 1, gap: 20, padding: 14, paddingBottom: 40, paddingTop: Platform.OS === 'android' ? 80 : 40, }}
                 keyboardShouldPersistTaps="handled"
             >
                 <Field label="EMPLOYEE ID" value={form.employeeId} onChangeText={updateField('employeeId')} placeholder="e.g. STAFF001" />
