@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useCallback, useState } from 'react';
@@ -50,10 +51,6 @@ export default function AddStaffScreen() {
         if (error) setError(null);
     };
 
-    const handleTakePhoto = useCallback(() => {
-        router.push('/admin/capture-photo');
-    }, []);
-
     const handleAddStaff = useCallback(() => {
         const trimmed: FormState = {
             employeeId: form.employeeId.trim(),
@@ -89,29 +86,29 @@ export default function AddStaffScreen() {
 
 
     const handleCapturePress = async () => {
-    // 1. Check if permission is granted; if not, request it
-    if (!permission || !permission.granted) {
-      const permissionResult = await requestPermission();
-      if (!permissionResult.granted) {
-        Alert.alert("Permission Denied", "Camera access is required to take a photo.");
-        return;
-      }
-    }
+        // 1. Check if permission is granted; if not, request it
+        if (!permission || !permission.granted) {
+            const permissionResult = await requestPermission();
+            if (!permissionResult.granted) {
+                Alert.alert("Permission Denied", "Camera access is required to take a photo.");
+                return;
+            }
+        }
 
-    // 2. Launch the native camera app UI
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [1, 1], // Square aspect ratio works great for face photos
-      quality: 0.8,
-      cameraType: ImagePicker.CameraType.front, // Use the front camera for face photos
-    });
+        // 2. Launch the native camera app UI
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1], // Square aspect ratio works great for face photos
+            quality: 0.8,
+            cameraType: ImagePicker.CameraType.front, // Use the front camera for face photos
+        });
 
-    // 3. Save the image URI if the user took a photo
-    if (!result.canceled) {
-      setCapturedUri(result.assets[0].uri);
-    }
-  };
+        // 3. Save the image URI if the user took a photo
+        if (!result.canceled) {
+            setCapturedUri(result.assets[0].uri);
+        }
+    };
 
     return (
         <KeyboardAvoidingView
@@ -138,13 +135,10 @@ export default function AddStaffScreen() {
                             <Image source={{ uri: capturedUri }} style={styles.photoPreview} />
                         ) : (
                             <View style={styles.photoPlaceholder}>
-                                <Text style={styles.photoPlaceholderText}>Tap to capture face photo</Text>
+                                <Ionicons name="camera-outline" size={24} color="gray" />
                             </View>
                         )}
                     </Pressable>
-                    {/* TODO: wire this pressable into the app's existing camera modal
-              (activated via router.push to the shared camera route) once that
-              flow is finalized — capture-photo.tsx above is a local stand-in. */}
                 </View>
 
                 {error ? <Text style={[type.error, styles.errorText]}>{error}</Text> : null}

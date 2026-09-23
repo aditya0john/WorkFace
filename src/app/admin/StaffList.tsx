@@ -1,7 +1,9 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useStaffStore } from '../../store/useStaffStore'; // Adjust path as needed
 
 const StaffList = () => {
+  const router = useRouter();
   const staffList = useStaffStore((state) => state.staffList);
 
   if (staffList.length === 0) {
@@ -19,7 +21,16 @@ const StaffList = () => {
       contentContainerStyle={styles.listContainer}
       contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => (
-        <View style={styles.card}>
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: "/Modal/StaffProfileModal",
+              params: {
+                staffId: item?.id
+              }
+            })
+          }
+          style={styles.card}>
           {/* Avatar / Photo */}
           {item.facePhotoUri ? (
             <Image source={{ uri: item.facePhotoUri }} style={styles.avatar} />
@@ -39,7 +50,7 @@ const StaffList = () => {
             </Text>
             <Text style={styles.subText}>ID: {item.employeeId} | {item.phoneNumber}</Text>
           </View>
-        </View>
+        </Pressable>
       )}
     />
   );
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#ffffff',
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 50,
     marginBottom: 10,
     alignItems: 'center',
     borderWidth: 1,

@@ -44,8 +44,10 @@ export default function SignInScreen() {
         >
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <View style={styles.mark} />
-                    <Text style={type.title}>WorkFace</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center', gap: spacing(2)}}>
+                        <View style={styles.mark} />
+                        <Text style={type.title}>WorkFace</Text>
+                    </View>
                     <Text style={[type.subtitle, styles.subtitle]}>
                         Sign in with your employee ID to continue
                     </Text>
@@ -127,11 +129,10 @@ const styles = StyleSheet.create({
         marginBottom: spacing(10),
     },
     mark: {
-        width: 40,
-        height: 40,
-        borderRadius: 10,
+        width: 30,
+        height: 30,
+        borderRadius: 5,
         backgroundColor: colors.primary,
-        marginBottom: spacing(4),
     },
     subtitle: {
         color: colors.textSecondary,

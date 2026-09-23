@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
-import { Pressable } from "react-native";
+import { ActionSheetIOS, Platform, Pressable } from "react-native";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -22,19 +22,73 @@ export default function RootLayout() {
           headerShadowVisible: false,
 
           headerLeft: () => (
-            <Pressable className="p-2 items-center" onPress={() => router.replace("/")}>
-              <Ionicons name="arrow-back" color="gray" size={24} />
+            <Pressable
+              className="p-2 items-center"
+              onPress={() => {
+                if (Platform.OS === 'ios') {
+                  ActionSheetIOS.showActionSheetWithOptions(
+                    {
+                      options: ['Cancel', 'Log Out'],
+                      destructiveButtonIndex: 1, // Highlights "Log Out" in red
+                      cancelButtonIndex: 0,
+                    },
+                    (buttonIndex) => {
+                      if (buttonIndex === 1) {
+                        router.replace('/');
+                      }
+                    }
+                  );
+                } else {
+                  // Fallback for Android if needed (or use standard Alert)
+                  router.replace('/');
+                }
+              }}
+            >
+              <Ionicons name="log-out-outline" color="gray" size={24} />
             </Pressable>
           ),
-
         }}
       />
 
-      <Stack.Screen name="staff" options={{ title: "staff", headerShown: true }} />
-
-      <Stack.Screen name="Modal/CameraCaptureModal"
+      <Stack.Screen
+        name="staff"
         options={{
-          title: "Camera Capture",
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+
+          headerLeft: () => (
+            <Pressable
+              className="p-2 items-center"
+              onPress={() => {
+                if (Platform.OS === 'ios') {
+                  ActionSheetIOS.showActionSheetWithOptions(
+                    {
+                      options: ['Cancel', 'Log Out'],
+                      destructiveButtonIndex: 1, // Highlights "Log Out" in red
+                      cancelButtonIndex: 0,
+                    },
+                    (buttonIndex) => {
+                      if (buttonIndex === 1) {
+                        router.replace('/');
+                      }
+                    }
+                  );
+                } else {
+                  // Fallback for Android if needed (or use standard Alert)
+                  router.replace('/');
+                }
+              }}
+            >
+              <Ionicons name="log-out-outline" color="gray" size={24} />
+            </Pressable>
+          ),
+        }}
+      />
+
+      <Stack.Screen name="Modal/StaffProfileModal"
+        options={{
+          title: "Staff Profile",
           headerShown: false,
           gestureDirection: "vertical",
           presentation: "formSheet",
