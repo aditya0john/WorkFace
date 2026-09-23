@@ -1,56 +1,61 @@
-# Welcome to your Expo app 👋
+# WorkFace - Staff Management & Facial Attendance App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+WorkFace is a modern React Native staff management and automated attendance application built using Expo Go. It combines client-side state management with a local Python Flask AI microservice to deliver seamless, on-device facial recognition and verification without requiring complex native Android/iOS C++ compilation pipelines.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Tech Stack
 
+*   **Framework:** React Native (Expo Go)
+*   **Routing:** Expo Router (`useRouter`, File-based routing)
+*   **State Management:** Zustand
+*   **Camera & Files:** `expo-image-picker`, `expo-file-system`
+*   **AI Backend Engine:** Python, Flask, `flask-cors`, DeepFace (`Facenet`), tf-keras, OpenCV (`cv2`)
+
+---
+
+## 📱 App Architecture & User Flows
+
+1.  **Authentication (`useAuthStore`)**
+    *   **Admin Flow:** Uses hardcoded administrative credentials for high-level management access.
+    *   **Staff Flow:** Dynamic authentication where staff members log in using their assigned Employee ID and phone number.
+2.  **Admin Portal**
+    *   **Add Staff:** Input employee details, capture a face photo via the camera, generate a facial embedding vector through the Flask AI engine, and save the record to the global store (`useStaffStore`).
+    *   **Staff Management:** View comprehensive lists of registered employees and inspect individual profile credentials.
+3.  **Staff Portal**
+    *   **Mark Attendance:** Capture a live face photo, transmit it to the backend to generate a fresh embedding vector, compare it locally against the logged-in user's stored embedding via **Cosine Similarity**, and log attendance upon successful verification.
+    *   **Attendance History:** View a chronological list of past check-ins complete with timestamps, unique employee IDs, and confidence score percentages.
+
+---
+
+## 🧠 Behind the Scenes: How Face Recognition Works
+
+Because heavy machine learning libraries (`TensorFlow`, `PyTorch`) cannot run inside the standard Expo Go container without native custom binaries, WorkFace utilizes a hybrid **Client-Server Architecture**:
+
+### 1. The AI Engine (`app.py` - Python Flask)
+Runs locally on your computer to handle heavy computer vision workloads:
+*   **Flask & CORS:** Sets up an HTTP web server allowing local network fetch requests from the mobile app.
+*   **Base64 Decoding:** Decodes text-based Base64 image payloads received from the phone back into a raw binary buffer (`np.frombuffer`).
+*   **OpenCV (`cv2.imdecode`)**: Transforms the binary buffer into a matrix format readable by the computer vision model.
+*   **`DeepFace.represent()`**: Utilizes the **Facenet** model and OpenCV backend to detect, align, and crop the face, transforming features into a **128-dimensional numerical vector (embedding)**.
+*   **JSON Response:** Returns the coordinate array back to the mobile client.
+
+### 2. The Bridge Service (`FaceService.ts` - React Native)
+Acts as the communication link between your mobile screens and the Python server:
+*   **File Read:** Uses `expo-file-system/legacy` to read captured photos and format them into Base64 strings.
+*   **Network Request:** Executes an HTTP `POST` request to your machine's local Wi-Fi IPv4 address (e.g., `http://192.168.1.x:5000/get-embedding`).
+*   **Cosine Similarity Matcher:** Runs **100% offline** on the mobile device in milliseconds, comparing the live scan vector against the saved profile vector to yield an accuracy score (closer to `1.0` indicates an exact match).
+
+---
+
+## 🛠️ Getting Started Locally
+
+### Prerequisites
+*   Node.js & npm installed
+*   Python installed on your machine
+*   A physical mobile device with **Expo Go** installed (connected to the same Wi-Fi network as your computer)
+
+### Step 1: Run the Python AI Backend
+1. Navigate to your backend folder and install dependencies:
    ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   pip install flask flask-cors deepface tf-keras opencv-python "numpy<2"
