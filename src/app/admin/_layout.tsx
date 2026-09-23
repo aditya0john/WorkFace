@@ -1,16 +1,29 @@
-import { Icon, NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 
 export default function TabsLayout() {
 
     return (
         <>
             <NativeTabs >
-                <NativeTabs.Trigger name="AddStaff" options={{ title: 'Add Staff' }}>
-                    <Icon sf={{ default: "house", selected: "house.fill" }} drawable="ic_place" />
+                <NativeTabs.Trigger name="AddStaff">
+                    <NativeTabs.Trigger.Icon
+                        sf={{
+                            default: "plus.circle",
+                            selected: "plus.circle.fill",
+                        }}
+                        drawable="ic_menu"
+                    />
+
                 </NativeTabs.Trigger>
 
-                <NativeTabs.Trigger name="StaffList" options={{ title: 'Staff List' }}>
-                    <Icon sf={{ default: "square.grid.2x2", selected: "square.grid.2x2.fill" }} drawable="ic_menu" />
+                <NativeTabs.Trigger name="StaffList">
+                    <NativeTabs.Trigger.Icon
+                        sf={{
+                            default: "person.2",
+                            selected: "person.2.fill",
+                        }}
+                        drawable="ic_people"
+                    />
                 </NativeTabs.Trigger>
             </NativeTabs>
         </>
