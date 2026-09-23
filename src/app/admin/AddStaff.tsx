@@ -14,6 +14,7 @@ import {
     TextInput,
     View
 } from 'react-native';
+import { extractFace, getFaceEmbedding } from '../../Services/FaceService';
 import { useCaptureStore } from '../../store/useCaptureStore';
 import { useStaffStore } from '../../store/useStaffStore';
 import { colors, spacing, type } from '../../theme/tokens';
@@ -45,6 +46,9 @@ export default function AddStaffScreen() {
     const capturedUri = useCaptureStore((s) => s.capturedUri);
     const setCapturedUri = useCaptureStore((s) => s.setCapturedUri);
     const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+
+    const [faceEmbedding, setFaceEmbedding] = useState<number[] | null>(null);
+    const [isProcessingFace, setIsProcessingFace] = useState(false);
 
     const updateField = (key: keyof FormState) => (value: string) => {
         setForm((f) => ({ ...f, [key]: value }));
@@ -93,27 +97,39 @@ export default function AddStaffScreen() {
 
 
     const handleCapturePress = async () => {
-        // 1. Check if permission is granted; if not, request it
-        if (!permission || !permission.granted) {
-            const permissionResult = await requestPermission();
+        try {
+            const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
             if (!permissionResult.granted) {
-                Alert.alert("Permission Denied", "Camera access is required to take a photo.");
+                Alert.alert("Permission Required", "Camera permission is needed to register faces.");
                 return;
             }
-        }
 
-        // 2. Launch the native camera app UI
-        const result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ['images'],
-            allowsEditing: true,
-            aspect: [1, 1], // Square aspect ratio works great for face photos
-            quality: 0.8,
-            cameraType: ImagePicker.CameraType.front, // Use the front camera for face photos
-        });
+            const result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ['images'],
+                allowsEditing: true,
+                aspect: [1, 1], // Square aspect ratio works great for face photos
+                quality: 0.8,
+                cameraType: ImagePicker.CameraType.front, // Use the front camera for face photos
+            });
 
-        // 3. Save the image URI if the user took a photo
-        if (!result.canceled) {
-            setCapturedUri(result.assets[0].uri);
+            if (!result.canceled && result.assets[0].uri) {
+                setIsProcessingFace(true);
+                const originalUri = result.assets[0].uri;
+
+                // 1. Detect & crop to face bounds (112x112 for MobileFaceNet)
+                const croppedFaceUri = await extractFace(originalUri);
+
+                // 2. Generate numerical embedding via TFLite
+                const embeddingArray = await getFaceEmbedding(croppedFaceUri);
+
+                setCapturedUri(croppedFaceUri);
+                setFaceEmbedding(embeddingArray);
+                Alert.alert("Success", "Face captured and embedding generated successfully!");
+            }
+        } catch (error: any) {
+            Alert.alert("Face Registration Failed", error.message || "Could not detect a valid face.");
+        } finally {
+            setIsProcessingFace(false);
         }
     };
 

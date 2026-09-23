@@ -7,4 +7,5 @@ export interface Staff {
   department: string;
   designation: string;
   facePhotoUri: string | null;
+  faceEmbedding?: number[];
 }
