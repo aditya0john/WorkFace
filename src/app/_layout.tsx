@@ -8,7 +8,11 @@ export default function RootLayout() {
         headerTitleAlign: "center",
       }}
     >
-      <Stack.Screen name="index" options={{ title: "index", headerShown: true }} />
+      <Stack.Screen name="index" options={{ title: "index", headerShown: false }} />
+
+      <Stack.Screen name="admin" options={{ title: "admin", headerShown: true }} />
+      <Stack.Screen name="staff" options={{ title: "staff", headerShown: true }} />
+
       <Stack.Screen name="Modal/CameraCaptureModal"
         options={{
           title: "Camera Capture",

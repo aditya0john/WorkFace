@@ -1,22 +1,10 @@
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import { useRouter } from 'expo-router';
-import { useNavigation } from 'expo-router/build/react-navigation/core/useNavigation';
-import { useLayoutEffect, useState } from 'react';
-import { Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('front');
   const [permission, requestPermission] = useCameraPermissions();
-  const navigation = useNavigation();
-  const router = useRouter();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={() => router.back()} className='flex-row items-center' />
-      )
-    });
-  }, [router]);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -32,7 +20,6 @@ export default function App() {
       </View>
     );
   }
-
 
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
