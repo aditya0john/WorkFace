@@ -46,6 +46,11 @@ Acts as the communication link between your mobile screens and the Python server
 *   **Network Request:** Executes an HTTP `POST` request to your machine's local Wi-Fi IPv4 address (e.g., `http://192.168.1.x:5000/get-embedding`).
 *   **Cosine Similarity Matcher:** Runs **100% offline** on the mobile device in milliseconds, comparing the live scan vector against the saved profile vector to yield an accuracy score (closer to `1.0` indicates an exact match).
 
+## 🛠️ Challenges Faced & their solutions/alternatives
+*  **expo-camera:** uses a live stream from the camera app only good for video stream but to capture frames `expo-image-picker` was the better option.
+*  **expo-image-manipulator:** could have been taxing to put another line of code just to get frame in place where both ios&android support square shaped crop system therefore reducing code.
+*  **react-native-fast-tflite**&**react-native-nitro-modules:** both of them use C++ turbo modules locally on phone which requires an Eas build or building app on phone using USB thethering both of which require a lot of time and code processing completely defeating the advantage of on-the-go native bridging React Native offers via expo-go app so Flask API + Deepface was adopted to acheive the same results
+
 ---
 
 ## 🛠️ Getting Started Locally
