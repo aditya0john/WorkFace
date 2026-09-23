@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useStaffStore } from '../../store/useStaffStore'; // Adjust path as needed
 
 const StaffList = () => {
@@ -59,6 +59,7 @@ const StaffList = () => {
 const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
+    paddingTop: Platform.OS === 'android' ? 120 : 20, paddingBottom: 60,
   },
   card: {
     flexDirection: 'row',

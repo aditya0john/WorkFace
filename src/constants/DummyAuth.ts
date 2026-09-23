@@ -6,6 +6,9 @@
  * app should import raw credentials — go through `validateCredentials` below.
  */
 
+import { useAuthStore } from "../store/useAuthStore";
+import { useStaffStore } from "../store/useStaffStore";
+
 export type UserRole = 'admin' | 'staff';
 
 interface DummyUser {
@@ -15,13 +18,13 @@ interface DummyUser {
 }
 
 const DUMMY_USERS: DummyUser[] = [
-  { employeeId: 'ADMIN001', password: 'admin123', role: 'admin' },
-  { employeeId: 'STAFF001', password: 'staff123', role: 'staff' },
+  { employeeId: 'ADMIN', password: 'password', role: 'admin' },
 ];
 
 export interface ValidatedUser {
   employeeId: string;
   role: UserRole;
+  staffId?: string;
 }
 
 /**
@@ -30,9 +33,40 @@ export interface ValidatedUser {
  * Returns the matched user, or null if credentials are invalid.
  */
 export function validateCredentials(employeeId: string, password: string): ValidatedUser | null {
-  const match = DUMMY_USERS.find(
+  const normalizedInputId = employeeId.trim().toLowerCase();
+
+  const adminMatch = DUMMY_USERS.find(
     (u) => u.employeeId.toLowerCase() === employeeId.trim().toLowerCase() && u.password === password
   );
-  if (!match) return null;
-  return { employeeId: match.employeeId, role: match.role };
+
+  if (adminMatch) {
+    useAuthStore.getState().setUser({
+      role: 'admin',
+      adminId: 'ADMIN',
+    });
+    return { employeeId: adminMatch.employeeId, role: adminMatch.role };
+  }
+
+  // 2. Check dynamic Staff members from Zustand Store
+  // .getState() lets us read the store synchronously outside of React hooks
+  const staffList = useStaffStore.getState().staffList;
+
+  const staffMatch = staffList.find(
+    (s) => s.employeeId.toLowerCase() === normalizedInputId
+  );
+
+  if (staffMatch && password === "password") {
+    useAuthStore.getState().setUser({
+      role: 'staff',
+      staffData: staffMatch, // Stores their full profile (name, photo, ID, etc.)
+    });
+    return {
+      employeeId: staffMatch.employeeId,
+      role: 'staff',
+      staffId: staffMatch.id // Pass the unique ID to help load their specific dashboard
+    };
+  }
+
+  // No match found in either
+  return null;
 }

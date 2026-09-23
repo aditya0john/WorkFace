@@ -51,9 +51,16 @@ export default function AddStaffScreen() {
         if (error) setError(null);
     };
 
+    const generateEmployeeId = (staffList: Staff[]): string => {
+        const nextNumber = staffList.length + 1;
+        // Pad the number to 3 places (e.g., 1 -> "001", 11 -> "011")
+        const paddedNumber = String(nextNumber).padStart(3, '0');
+        return `STAFF${paddedNumber}`;
+    };
+
     const handleAddStaff = useCallback(() => {
         const trimmed: FormState = {
-            employeeId: form.employeeId.trim(),
+            employeeId: generateEmployeeId(useStaffStore.getState().staffList),
             fullName: form.fullName.trim(),
             phoneNumber: form.phoneNumber.trim(),
             email: form.email.trim(),
@@ -118,10 +125,9 @@ export default function AddStaffScreen() {
             <ScrollView
                 contentInsetAdjustmentBehavior='automatic'
                 style={styles.flex}
-                contentContainerStyle={{ flexGrow: 1, gap: 20, padding: 14, paddingBottom: 40, paddingTop: Platform.OS === 'android' ? 80 : 40, }}
+                contentContainerStyle={{ flexGrow: 1, gap: 20, padding: 14, paddingBottom: 40, paddingTop: Platform.OS === 'android' ? 120 : 40, }}
                 keyboardShouldPersistTaps="handled"
             >
-                <Field label="EMPLOYEE ID" value={form.employeeId} onChangeText={updateField('employeeId')} placeholder="e.g. STAFF001" />
                 <Field label="FULL NAME" value={form.fullName} onChangeText={updateField('fullName')} placeholder="e.g. Jordan Lee" />
                 <Field label="PHONE NUMBER" value={form.phoneNumber} onChangeText={updateField('phoneNumber')} placeholder="e.g. 555-0100" keyboardType="phone-pad" />
                 <Field label="EMAIL" value={form.email} onChangeText={updateField('email')} placeholder="e.g. jordan@company.com" keyboardType="email-address" autoCapitalize="none" />

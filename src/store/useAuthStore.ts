@@ -1,33 +1,22 @@
 import { create } from 'zustand';
+import type { Staff } from '../types/type'; // Adjust path to your type definition
 
 export type UserRole = 'admin' | 'staff';
 
-export interface AuthUser {
-  id: string;
+export interface LoggedInUser {
   role: UserRole;
-  name: string;
-  employeeId: string; // admin_code or staff_code
+  staffData?: Staff;      // Full staff profile available instantly if role is 'staff'
+  adminId?: string;       // If role is 'admin'
 }
 
 interface AuthState {
-  user: AuthUser | null;
-  isHydrating: boolean;
-  signIn: (employeeId: string, password: string) => Promise<AuthUser>;
+  user: LoggedInUser | null;
+  setUser: (user: LoggedInUser | null) => void;
   signOut: () => void;
 }
 
-// Lazy import to keep the store file light; authService owns the actual DB/hash work.
-import { authenticate } from '../services/auth/authService';
-
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isHydrating: false,
-
-  signIn: async (employeeId, password) => {
-    const user = await authenticate(employeeId.trim(), password);
-    set({ user });
-    return user;
-  },
-
+  setUser: (user) => set({ user }),
   signOut: () => set({ user: null }),
 }));
