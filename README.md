@@ -59,3 +59,23 @@ Acts as the communication link between your mobile screens and the Python server
 1. Navigate to your backend folder and install dependencies:
    ```bash
    pip install flask flask-cors deepface tf-keras opencv-python "numpy<2"
+
+   Start the Flask server:
+   Bash python app.py
+### Step 2: Configure Your Mobile App Network URL
+Find your computer's local Wi-Fi IPv4 address using ipconfig (Windows) or ifconfig (Mac/Linux).
+
+Open src/Services/FaceService.ts and update the URL to match your computer's IP address and port 5000:
+
+TypeScript
+const FLASK_API_URL = 'http://YOUR_LAPTOP_IP:5000/get-embedding';
+Step 3: Run the React Native App
+Install project packages:
+
+```Bash
+npm install
+Start the Expo development server:
+
+Bash
+npx expo start
+Scan the generated QR code using the Expo Go app on your physical phone.
