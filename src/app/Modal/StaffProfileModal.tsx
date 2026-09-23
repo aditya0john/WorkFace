@@ -74,6 +74,12 @@ export default function StaffProfileModal() {
           <Text style={styles.label}>Email Address</Text>
           <Text style={styles.value}>{staff.email}</Text>
         </View>
+
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Embedding</Text>
+          <Text style={styles.value}>{staff.faceEmbedding?.slice(0, 10).join(', ') || 'N/A'}</Text>
+        </View>
       </View>
     </View>
   );

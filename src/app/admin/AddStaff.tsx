@@ -14,7 +14,7 @@ import {
     TextInput,
     View
 } from 'react-native';
-import { extractFace, getFaceEmbedding } from '../../Services/FaceService';
+import { getFaceEmbeddingFromBackend } from '../../Services/FaceService';
 import { useCaptureStore } from '../../store/useCaptureStore';
 import { useStaffStore } from '../../store/useStaffStore';
 import { colors, spacing, type } from '../../theme/tokens';
@@ -86,6 +86,7 @@ export default function AddStaffScreen() {
             id: `${Date.now()}`,
             ...trimmed,
             facePhotoUri: capturedUri,
+            faceEmbedding: faceEmbedding || undefined,
         };
 
         addStaff(staff);
@@ -116,15 +117,12 @@ export default function AddStaffScreen() {
                 setIsProcessingFace(true);
                 const originalUri = result.assets[0].uri;
 
-                // 1. Detect & crop to face bounds (112x112 for MobileFaceNet)
-                const croppedFaceUri = await extractFace(originalUri);
+                // Send image to Python Flask server to extract face and calculate embedding
+                const embeddingArray = await getFaceEmbeddingFromBackend(originalUri);
 
-                // 2. Generate numerical embedding via TFLite
-                const embeddingArray = await getFaceEmbedding(croppedFaceUri);
-
-                setCapturedUri(croppedFaceUri);
+                setCapturedUri(originalUri);
                 setFaceEmbedding(embeddingArray);
-                Alert.alert("Success", "Face captured and embedding generated successfully!");
+                Alert.alert("Success", "Face registered and AI embedding generated!");
             }
         } catch (error: any) {
             Alert.alert("Face Registration Failed", error.message || "Could not detect a valid face.");

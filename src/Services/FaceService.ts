@@ -1,40 +1,39 @@
-import * as ImageManipulator from 'expo-image-manipulator';
-import { loadTensorflowModel } from 'react-native-fast-tflite';
+import * as FileSystem from 'expo-file-system/legacy';
 
-let faceModel: any = null;
+// Replace with your computer's local IP address if testing on a physical phone via Wi-Fi 
+// (e.g., 'http://192.168.1.15:5000/get-embedding')
+// Use 'http://10.0.2.2:5000/get-embedding' if using an Android Emulator
+const FLASK_API_URL = 'http://192.168.1.2:5000/get-embedding';
 
-export const initFaceModel = async () => {
-  if (!faceModel) {
-    // Pass [] as the second argument for delegates
-    faceModel = await loadTensorflowModel(
-      require('../assets/mobilefacenet.tflite'),
-      []
-    );
+export const getFaceEmbeddingFromBackend = async (imageUri: string): Promise<number[]> => {
+  try {
+    // 1. Convert local image URI to Base64 string
+    const base64Image = await FileSystem.readAsStringAsync(imageUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    // 2. Send to Python Flask API
+    const response = await fetch(FLASK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ image: base64Image }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to generate embedding.');
+    }
+
+    return data.embedding; // Returns the number[] vector array
+  } catch (error: any) {
+    throw new Error(`Face Service Error: ${error.message}`);
   }
 };
 
-// Resizes the user-cropped image directly to MobileFaceNet's 112x112 spec
-export const processFaceImage = async (imageUri: string): Promise<string> => {
-  const manipulated = await ImageManipulator.manipulateAsync(
-    imageUri,
-    [{ resize: { width: 112, height: 112 } }],
-    { format: ImageManipulator.SaveFormat.JPEG }
-  );
-  return manipulated.uri;
-};
-
-// Generates the embedding vector via TFLite
-export const getFaceEmbedding = async (croppedFaceUri: string): Promise<number[]> => {
-  await initFaceModel();
-  
-  // TODO: Once your image-to-tensor raw byte conversion is plugged in, 
-  // run: const output = await faceModel.run([inputTensor]);
-  
-  // Temporary mock vector matching standard embedding size (e.g. 128-dim)
-  return Array.from({ length: 128 }, () => Math.random());
-};
-
-// Cosine Similarity Matcher
+// Cosine Similarity Math (Runs completely offline in JS on your app)
 export const calculateCosineSimilarity = (vecA: number[], vecB: number[]): number => {
   let dotProduct = 0;
   let normA = 0;

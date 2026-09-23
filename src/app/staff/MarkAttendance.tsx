@@ -1,14 +1,92 @@
+import { calculateCosineSimilarity, getFaceEmbeddingFromBackend } from '@/src/Services/FaceService';
+import { useAttendanceStore } from '@/src/store/useAttendanceStore';
 import { useAuthStore } from '@/src/store/useAuthStore';
-import { Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { colors, spacing, type } from '@/src/theme/tokens';
+import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Image, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const MarkAttendance = () => {
+  const router = useRouter();
+
   const user = useAuthStore((state) => state.user);
+  const addAttendanceRecord = useAttendanceStore((s) => s.addRecord);
+
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [capturedUri, setCapturedUri] = useState<string | null>(null);
+
+  // Extract the logged-in staff member's registered face embedding from auth store
+  const loggedInStaffEmbedding = user?.staffData?.faceEmbedding;
+
+  const handleVerifyAndMarkAttendance = async () => {
+    if (!loggedInStaffEmbedding || !Array.isArray(loggedInStaffEmbedding) || loggedInStaffEmbedding.length === 0) {
+      Alert.alert("Profile Error", "No facial data found for your profile. Please contact an administrator to re-register your face.");
+      return;
+    }
+
+    try {
+      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Required", "Camera permission is required for face verification.");
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+        cameraType: ImagePicker.CameraType.front,
+      });
+
+      if (!result.canceled && result.assets[0].uri) {
+        setIsVerifying(true);
+        const imageUri = result.assets[0].uri;
+        setCapturedUri(imageUri);
+
+        // 1. Get embedding for the live attendance capture via Python Flask backend
+        const liveEmbedding = await getFaceEmbeddingFromBackend(imageUri);
+
+        // 2. Direct 1-to-1 Cosine Similarity against the logged-in user's stored embedding
+        const similarity = calculateCosineSimilarity(liveEmbedding, loggedInStaffEmbedding);
+        const MATCH_THRESHOLD = 0.60; // Adjust between 0.55 - 0.70 based on testing
+
+        // 3. Evaluate match result
+        if (similarity >= MATCH_THRESHOLD) {
+          const now = new Date();
+          addAttendanceRecord({
+            employeeId: user?.staffData?.employeeId || 'UNKNOWN',
+            fullName: user?.staffData?.fullName || 'Staff Member',
+            timestamp: now.toLocaleString(), // e.g., "9/23/2026, 8:53:05 PM"
+            confidenceScore: Number((similarity * 100).toFixed(1)),
+          });
+
+          Alert.alert(
+            "Attendance Marked! ✅",
+            `Welcome back, ${user?.staffData?.fullName}\nMatch Confidence: ${(similarity * 100).toFixed(1)}%`,
+            [{ text: "OK", onPress: () => router.push('/staff/AttendanceHistory') }]
+          );
+        } else {
+          Alert.alert(
+            "Verification Failed ❌",
+            `Face does not match your profile. Match score was ${(similarity * 100).toFixed(1)}%. Please try again.`
+          );
+        }
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "Failed to process face verification.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   return (
     <ScrollView
       contentInsetAdjustmentBehavior='automatic'
       contentContainerStyle={{ gap: 20, padding: 14, paddingBottom: 40, paddingTop: Platform.OS === 'android' ? 120 : 40, }}>
-        
+
       <View style={styles.card}>
         {/* Avatar / Photo */}
         {user?.staffData?.facePhotoUri ? (
@@ -31,10 +109,30 @@ const MarkAttendance = () => {
         </View>
       </View>
 
-      <Text>MarkAttendance</Text>
-    </ScrollView >
-  )
-}
+      <View style={styles.cards}>
+        <Ionicons name="scan-outline" size={64} color={colors.primary} />
+        <Text style={styles.title}>Facial Attendance Check-In</Text>
+        <Text style={styles.subtitle}>
+          Position your face within the frame to verify your identity and record your attendance instantly.
+        </Text>
+
+        {capturedUri && (
+          <Image source={{ uri: capturedUri }} style={styles.previewImage} />
+        )}
+
+        <Pressable
+          onPress={handleVerifyAndMarkAttendance}
+          style={[styles.button, isVerifying && { opacity: 0.7 }]}
+          disabled={isVerifying}
+        >
+          <Text style={[type.button, styles.buttonText]}>
+            {isVerifying ? 'Verifying with AI...' : 'Scan Face & Check In'}
+          </Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
@@ -86,17 +184,47 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 2,
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  cards: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: spacing(6),
     alignItems: 'center',
-    padding: 24,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: spacing(4),
   },
-  emptyText: {
-    color: '#888',
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    textAlign: 'center',
+  },
+  subtitle: {
     fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  previewImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  button: {
+    backgroundColor: colors.primary,
+    height: 50,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: spacing(2),
+  },
+  buttonText: {
+    color: colors.surface,
+    fontSize: 16,
   },
 });
 
-
-export default MarkAttendance
+export default MarkAttendance;
