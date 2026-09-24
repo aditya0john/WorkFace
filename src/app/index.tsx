@@ -1,4 +1,4 @@
-import SignInScreen from "../screens/SignInScreen";
+import SignInScreen from "../auth/SignInScreen";
 
 
 export default function Index() {

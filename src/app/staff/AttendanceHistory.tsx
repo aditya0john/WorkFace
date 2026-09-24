@@ -9,8 +9,9 @@ export default function AttendanceHistoryScreen() {
   const employeeId = user?.staffData?.employeeId;
 
   // Fetch only this employee's logs from the Zustand store
-  const getRecordsByEmployee = useAttendanceStore((state) => state.getRecordsByEmployee);
-  const myRecords = employeeId ? getRecordsByEmployee(employeeId) : [];
+  // ✅ Subscribes to the data (triggers re-render instantly when data changes)
+  const allRecords = useAttendanceStore((state) => state.records);
+  const myRecords = employeeId ? allRecords.filter(r => r.employeeId === employeeId) : [];
 
   return (
     <FlatList
@@ -33,7 +34,7 @@ export default function AttendanceHistoryScreen() {
               <Text style={styles.idText}>Lat: {item.latitude?.toFixed(4)}</Text>
               <Text style={styles.idText}>Lng: {item.longitude?.toFixed(4)}</Text>
             </View>
-              <Text style={styles.idText}>City: {item.City}</Text>
+            <Text style={styles.idText}>City: {item.City}</Text>
           </View>
           <View style={styles.badge}>
             <Ionicons name="checkmark-circle" size={16} color={'green'} />

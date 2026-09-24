@@ -13,7 +13,7 @@ import { validateCredentials } from '../constants/DummyAuth';
 import { colors, spacing, type } from '../theme/tokens';
 
 export default function SignInScreen() {
-    const [employeeId, setEmployeeId] = useState('STAFF');
+    const [employeeId, setEmployeeId] = useState('ADMIN');
     const [password, setPassword] = useState('password');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
