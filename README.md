@@ -67,6 +67,7 @@ Acts as the communication link between your mobile screens and the Python server
 
    Start the Flask server:
    Bash python app.py
+   
 ### Step 2: Configure Your Mobile App Network URL
 Find your computer's local Wi-Fi IPv4 address using ipconfig (Windows) or ifconfig (Mac/Linux).
 
@@ -76,11 +77,67 @@ TypeScript
 const FLASK_API_URL = 'http://YOUR_LAPTOP_IP:5000/get-embedding';
 Step 3: Run the React Native App
 Install project packages:
+   npm install
 
-```Bash
-npm install
-Start the Expo development server:
+   Start the Expo development server:
+   npx expo start
 
-Bash
-npx expo start
-Scan the generated QR code using the Expo Go app on your physical phone.
+   Scan the generated QR code using the Expo Go app on your physical phone.
+
+###🚀 How to Run the Project
+
+This project consists of a React Native (Expo) frontend and a Python Flask backend. You will need to run them simultaneously in two separate terminal windows.
+
+Step 1: Start the Python Backend
+
+The backend utilizes Flask, TensorFlow/Keras, and OpenCV for facial recognition. These dependencies must be installed on your machine before running the server.
+
+Open a new terminal and navigate to your backend folder.
+
+Install the required Python packages:
+
+pip install flask flask-cors tf-keras opencv-python
+
+
+Start the Flask API:
+
+python app.py
+
+
+Leave this terminal window open and running.
+
+Step 2: Install Frontend Dependencies
+
+This project uses Yarn for package management due to specific dependency resolutions. Do not use npm install, as it will fail to resolve the workspace correctly.
+
+Open a second terminal window and navigate to your frontend project root.
+
+Install dependencies using Yarn:
+
+yarn install
+
+
+Step 3: Start the React Native App
+
+Once dependencies are installed, start the Expo development server. We recommend clearing the cache to ensure you are testing the freshest build.
+
+Start the server:
+
+npx expo start -c
+
+
+(Alternatively, you can run npx expo start --go to force Expo Go mode).
+
+Connecting to Expo Go:
+
+If the terminal defaults to a "Development Build" but you want to use the standard Expo Go app on your phone, simply press s in the terminal to switch to Expo Go.
+
+Scan the QR code using the Expo Go app (Android) or the default Camera app (iOS).
+
+⚠️ Things to Keep in Mind
+
+Strictly use Yarn: If you accidentally run npm install, it may break your node_modules. If this happens, delete your node_modules folder and run yarn install again.
+
+Network Connection: Ensure both your computer (running the Python API) and your mobile device (running Expo Go) are connected to the same Wi-Fi network so the app can communicate with the backend.
+
+Stale Data / Caching Issues: If you add new assets or rename files and the app crashes, always stop the server and restart it with the -c flag (npx expo start -c) to clear the Metro bundler cache.
