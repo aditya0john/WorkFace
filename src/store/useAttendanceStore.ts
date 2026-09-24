@@ -9,6 +9,7 @@ export interface AttendanceRecord {
   latitude?: number;
   longitude?: number;
   City?: string; // Added City field to AttendanceRecord
+  imageUri?: string;
 }
 
 interface AttendanceState {

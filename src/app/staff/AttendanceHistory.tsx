@@ -2,7 +2,7 @@ import { useAttendanceStore } from '@/src/store/useAttendanceStore';
 import { useAuthStore } from '@/src/store/useAuthStore';
 import { colors, spacing } from '@/src/theme/tokens';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Platform, StyleSheet, Text, View } from 'react-native';
 
 export default function AttendanceHistoryScreen() {
   const user = useAuthStore((state) => state.user);
@@ -27,6 +27,14 @@ export default function AttendanceHistoryScreen() {
       }
       renderItem={({ item }) => (
         <View style={styles.recordCard}>
+          {item.imageUri ? (
+            <Image
+              source={{ uri: item.imageUri }}
+              style={{ width: 50, height: 50, borderRadius: 25, marginRight: 12 }}
+            />
+          ) : (
+            <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: '#eee', marginRight: 12 }} />
+          )}
           <View style={styles.recordInfo}>
             <Text style={styles.timestampText}>{item.timestamp}</Text>
             <Text style={styles.idText}>ID: {item.employeeId}</Text>

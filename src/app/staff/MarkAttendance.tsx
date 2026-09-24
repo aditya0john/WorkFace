@@ -92,6 +92,7 @@ const MarkAttendance = () => {
             longitude: longitude ?? undefined,
             latitude: latitude ?? undefined,
             City: fetchedCity || 'Unknown Location',
+            imageUri: imageUri,
           });
 
           Alert.alert(
