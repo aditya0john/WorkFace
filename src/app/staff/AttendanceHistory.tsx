@@ -29,6 +29,11 @@ export default function AttendanceHistoryScreen() {
           <View style={styles.recordInfo}>
             <Text style={styles.timestampText}>{item.timestamp}</Text>
             <Text style={styles.idText}>ID: {item.employeeId}</Text>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Text style={styles.idText}>Lat: {item.latitude?.toFixed(4)}</Text>
+              <Text style={styles.idText}>Lng: {item.longitude?.toFixed(4)}</Text>
+            </View>
+              <Text style={styles.idText}>City: {item.City}</Text>
           </View>
           <View style={styles.badge}>
             <Ionicons name="checkmark-circle" size={16} color={'green'} />

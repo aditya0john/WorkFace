@@ -4,6 +4,7 @@ import { useAuthStore } from '@/src/store/useAuthStore';
 import { colors, spacing, type } from '@/src/theme/tokens';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Image, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -28,6 +29,33 @@ const MarkAttendance = () => {
 
     try {
       const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+      const locationPermission = await Location.requestForegroundPermissionsAsync();
+
+      let latitude: number | undefined;
+      let longitude: number | undefined;
+      let fetchedCity = '';
+
+
+      if (locationPermission.granted) {
+        try {
+          const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+          latitude = loc.coords.latitude;
+          longitude = loc.coords.longitude;
+
+          const addressArray = await Location.reverseGeocodeAsync({ latitude, longitude });
+
+          if (addressArray.length > 0) {
+            const address = addressArray[0];
+            // Fallback to subregion or region if 'city' is null (happens on some Android devices)
+            const cityName = address.city || address.subregion || address.district || 'Unknown City';
+            const regionName = address.region || '';
+            fetchedCity = `${cityName}, ${regionName}`.replace(/,\s*$/, ''); // Remove trailing comma if no region
+          }
+        } catch (e) {
+          console.log("Could not fetch location coordinates:", e);
+        }
+      }
+
       if (!permissionResult.granted) {
         Alert.alert("Permission Required", "Camera permission is required for face verification.");
         return;
@@ -61,6 +89,9 @@ const MarkAttendance = () => {
             fullName: user?.staffData?.fullName || 'Staff Member',
             timestamp: now.toLocaleString(), // e.g., "9/23/2026, 8:53:05 PM"
             confidenceScore: Number((similarity * 100).toFixed(1)),
+            longitude: longitude ?? undefined,
+            latitude: latitude ?? undefined,
+            City: fetchedCity || 'Unknown Location',
           });
 
           Alert.alert(

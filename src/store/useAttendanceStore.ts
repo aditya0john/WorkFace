@@ -6,6 +6,9 @@ export interface AttendanceRecord {
   fullName: string;
   timestamp: string; // Formatted date string
   confidenceScore: number;
+  latitude?: number;
+  longitude?: number;
+  City?: string; // Added City field to AttendanceRecord
 }
 
 interface AttendanceState {
