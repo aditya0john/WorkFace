@@ -437,9 +437,7 @@ During development, native Android/Java build issues and the additional build ti
 
 ---
 
-# 📂 Suggested Project Structure
-
-A possible project structure is:
+# 📂 Project Structure
 
 ```text
 WorkFace/
@@ -466,8 +464,6 @@ WorkFace/
 ├── app.json
 └── README.md
 ```
-
-> Adjust the structure above to match the actual folders and filenames in your repository.
 
 ---
 
