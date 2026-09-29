@@ -5,18 +5,23 @@ WorkFace is a modern **React Native staff management and automated attendance ap
 The application is designed around a hybrid architecture: the mobile application handles authentication, staff management, attendance records, and face-matching logic, while the Python backend performs the computationally intensive facial embedding generation.
 
 ---
-
-#GPT
-
-<div style="display: flex; justify-content: center; align-items: flex-start; gap: 4vw; flex-wrap: wrap;"> <div style="text-align: center;"> <h3>Demo</h3> <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="30vw" height="60vh" controls> </video> </div> <div style="text-align: center;"> <h3>Screenshots</h3> <div style="display: flex; gap: 2vw;"> <img src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" alt="Screenshot 1" width="20vw" height="60vh" />
-  <img
-    src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
-    alt="Screenshot 2"
-    width="20vw"
-    height="60vh" />
+<div style="display: flex; flex-direction:row; justify-content: between; align-items: center; gap: 4vw;">
+<div style="text-align: center;">
+  <h3>Demo</h3> 
+  <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="30vw" height="60vh" controls> </video> 
 </div>
-
-</div> </div>
+  <div style="text-align: center;"> 
+    <h3>Screenshots</h3>
+    <div style="display: flex; gap: 2vw;">
+      <img src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" alt="Screenshot 1" width="200" height="400" />
+      <img
+        src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
+        alt="Screenshot 2"
+        width="200"
+        height="400" />
+    </div>
+  </div>
+</div>
 ---
 # Working
 DEMO SCREEN RECORDING :
