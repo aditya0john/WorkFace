@@ -7,7 +7,7 @@ The application is designed around a hybrid architecture: the mobile application
 ---
 <div style="display: flex; flex-direction:row; justify-content: between; align-items: center; gap: 4vw;">
 <div style="text-align: center;">
-  <h3>Demo</h3> 
+  <h3>Working Demo</h3> 
   <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="30vw" height="60vh" controls> </video> 
 </div>
   <div style="text-align: center;"> 
@@ -23,21 +23,24 @@ The application is designed around a hybrid architecture: the mobile application
   </div>
 </div>
 ---
-# Working
-DEMO SCREEN RECORDING :
- <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="200" height="400" controls></video>
 
+#TRYING
+<div style="display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; gap:40px;"> <div style="flex:0 0 auto; text-align:center;"> <h3>Working Demo</h3> <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" controls style="width:400px; height:650px; object-fit:contain;"> </video> </div> <div style="flex:0 0 auto; text-align:center;"> <h3>Screenshots</h3>
+<div style="display:flex; flex-direction:row; gap:20px;">
+  <img
+    src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682"
+    alt="Screenshot 1"
+    style="width:200px; height:400px; object-fit:contain;" />
 
+  <img
+    src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
+    alt="Screenshot 2"
+    style="width:200px; height:400px; object-fit:contain;" />
+</div>
 
-SCREENSHOTS :
-
-
-
-<img width="200" height="400" alt="IMG_9913" src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" />
-<img width="200" height="400" alt="IMG_9912" src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b" />
+</div> </div>
 
 ---
-
 ## ✨ Features
 
 ### 🔐 Authentication
