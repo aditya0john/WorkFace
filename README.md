@@ -5,6 +5,15 @@ WorkFace is a modern **React Native staff management and automated attendance ap
 The application is designed around a hybrid architecture: the mobile application handles authentication, staff management, attendance records, and face-matching logic, while the Python backend performs the computationally intensive facial embedding generation.
 
 ---
+# Working
+DEMO SCREEN RECORDING :
+https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363
+
+SCREENSHOTS :
+<img width="585" height="1266" alt="IMG_9913" src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" />
+<img width="585" height="1266" alt="IMG_9912" src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b" />
+
+---
 
 ## ✨ Features
 
