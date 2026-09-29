@@ -25,6 +25,34 @@ The application is designed around a hybrid architecture: the mobile application
 </div>
 ---
 
+<div style="display:flex; flex-direction:row; align-items:flex-start; justify-content:center; gap:50px;"> <div style="display:flex; flex-direction:column; align-items:center; text-align:center;"> <h3>Working Demo</h3>
+<video
+  src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363"
+  controls
+  style="display:block; width:200px !important; height:400px !important; max-width:200px !important;">
+</video>
+
+</div> <div style="display:flex; flex-direction:column; align-items:center; text-align:center;"> <h3>Screenshots</h3>
+<div style="display:flex; flex-direction:row; gap:20px;">
+  <img
+    src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682"
+    alt="Screenshot 1"
+    width="200"
+    height="400"
+    style="display:block; width:200px; height:400px;" />
+
+  <img
+    src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
+    alt="Screenshot 2"
+    width="200"
+    height="400"
+    style="display:block; width:200px; height:400px;" />
+</div>
+
+</div> </div>
+
+---
+
 ## ✨ Features
 
 ### 🔐 Authentication
