@@ -6,15 +6,9 @@ The application is designed around a hybrid architecture: the mobile application
 
 ---
 <div style="display: flex; flex-direction:row; justify-content: space-between; align-items: center; gap: 4vw;">
-  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center; width:400;">
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center; width:40vw">
     <h3>Working Demo</h3> 
     <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="200" height="400" controls> </video> 
-      <img src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" alt="Screenshot 1" width="200" height="400" />
-      <img
-        src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
-        alt="Screenshot 2"
-        width="200"
-        height="400" />
   </div>
   
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center;"> 
