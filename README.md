@@ -23,7 +23,8 @@ The application is designed around a hybrid architecture: the mobile application
     </div>
   </div>
 </div>
----
+
+
 
 ## ✨ Features
 
