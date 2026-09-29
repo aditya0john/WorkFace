@@ -5,12 +5,13 @@ WorkFace is a modern **React Native staff management and automated attendance ap
 The application is designed around a hybrid architecture: the mobile application handles authentication, staff management, attendance records, and face-matching logic, while the Python backend performs the computationally intensive facial embedding generation.
 
 ---
-<div style="display: flex; flex-direction:row; justify-content: between; align-items: center; gap: 4vw;">
-<div style="text-align: center;">
-  <h3>Working Demo</h3> 
-  <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="30vw" height="60vh" controls> </video> 
-</div>
-  <div style="text-align: center;"> 
+<div style="display: flex; flex-direction:row; justify-content: space-between; align-items: center; gap: 4vw;">
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center; width:400;">
+    <h3>Working Demo</h3> 
+    <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="200" height="400" controls> </video> 
+  </div>
+  
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center;"> 
     <h3>Screenshots</h3>
     <div style="display: flex; gap: 2vw;">
       <img src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682" alt="Screenshot 1" width="200" height="400" />
@@ -24,23 +25,6 @@ The application is designed around a hybrid architecture: the mobile application
 </div>
 ---
 
-#TRYING
-<div style="display:flex; flex-direction:row; align-items:flex-start; justify-content:space-between; gap:40px;"> <div style="flex:0 0 auto; text-align:center;"> <h3>Working Demo</h3> <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" controls style="width:400px; height:650px; object-fit:contain;"> </video> </div> <div style="flex:0 0 auto; text-align:center;"> <h3>Screenshots</h3>
-<div style="display:flex; flex-direction:row; gap:20px;">
-  <img
-    src="https://github.com/user-attachments/assets/9a03540f-8568-4298-a167-98eaec729682"
-    alt="Screenshot 1"
-    style="width:200px; height:400px; object-fit:contain;" />
-
-  <img
-    src="https://github.com/user-attachments/assets/51af6c5e-56f5-4efb-b21c-b37afeb8c58b"
-    alt="Screenshot 2"
-    style="width:200px; height:400px; object-fit:contain;" />
-</div>
-
-</div> </div>
-
----
 ## ✨ Features
 
 ### 🔐 Authentication
