@@ -9,7 +9,7 @@ The application is designed around a hybrid architecture: the mobile application
 DEMO SCREEN RECORDING :
 https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363
 
-<video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" controls></video>
+<video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="200" height="400" controls></video>
 
 
 SCREENSHOTS :
