@@ -8,7 +8,7 @@ The application is designed around a hybrid architecture: the mobile application
 <div style="display: flex; flex-direction:row; justify-content: space-between; align-items: center; gap: 4vw;">
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center; width:40vw">
     <h3>Working Demo</h3> 
-    <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width="200" height="400" controls> </video> 
+    <video src="https://github.com/user-attachments/assets/f5ecb9bb-3f31-4a17-b251-83a1f436b363" width:200 !important; height=400 !important; controls> </video> 
   </div>
   
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align: center;"> 
